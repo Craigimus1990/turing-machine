@@ -23,9 +23,6 @@ delta[(5, 'b')] = (1, 'b', 'L')
 delta[(1, 'b')] = ('A', '$', 'R')
 delta[(6, 'b')] = ('A', '$', 'R')
 
-tm = TuringMachine(q0, qA, qR, delta)
-tm.inputTape(tape)
-
 
 class TuringMachine:
   def __init__(self, q0, qA, qR, delta):
@@ -35,30 +32,35 @@ class TuringMachine:
     self.delta = delta
 
   def inputTape(self, tape):
-	tape = list(tape)
-    end_tape, end_index, end_state = self.__processTape(tape, 0, q0)
-    configuration = end_tape[:end_index] + ['(q', end_state, ')'] + end_tape[end_index:]
-    print ''.join(configuration)
+    tape = list(tape)
+
+    end_tape, end_index, end_state = self.__processTape(tape, 0, self.q0)
+    self.__printConfiguration(end_tape, end_index, end_state)
     if (end_state == self.qA):
       print 'ACCEPTED'
     elif (end_state == self.qR):
       print 'REJECTED'
     return
 
+  def __printConfiguration(self, tape, index, state):
+    configuration = tape[:index] + ['(q', str(state), ')'] + tape[index:]
+    print ''.join(configuration)
+
 
   def __processTape(self, tape, index, state):
+    self.__printConfiguration(tape, index, state)
     transition = self.delta[(state, tape[index])]
 
-    if (!transition):
-      return tape, index, self.qR
+    if (not transition):
+      return (tape, index, self.qR)
 
     new_state, new_symbol, head_move = transition
     new_index = self.__moveHead(tape, new_symbol, head_move, index)
 
     if (new_state == self.qA or new_state == self.qR):
-      return tape, new_index, new_stae
+      return (tape, new_index, new_state)
 
-	self.__processTape(tape, new_index, new_state)
+    return self.__processTape(tape, new_index, new_state)
 
 
 
@@ -77,4 +79,7 @@ class TuringMachine:
 
     return index
  
+
+tm = TuringMachine(q0, qA, qR, delta)
+tm.inputTape(tape)
 
