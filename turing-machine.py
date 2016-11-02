@@ -11,9 +11,17 @@ qR = 'R'
 
 # Set up delta function
 delta = {}
-delta[(0, '0')] = (1, '0', 'R')
-delta[(0, 'b')] = ('A', 'b', 'R')
-delta[(1, '0')] = (0, '0', 'R')
+delta[(0, '0')] = (0, '0', 'R')
+delta[(0, '1')] = (0, '1', 'R')
+delta[(0, 'b')] = (1, 'b', 'L')
+delta[(1, '1')] = (2, 'b', 'R')
+delta[(2, 'b')] = (3, '1', 'L')
+delta[(3, 'b')] = (1, 'b', 'L')
+delta[(1, '0')] = (4, 'b', 'R')
+delta[(4, 'b')] = (5, '0', 'L')
+delta[(5, 'b')] = (1, 'b', 'L')
+delta[(1, 'b')] = ('A', '$', 'R')
+delta[(6, 'b')] = ('A', '$', 'R')
 
 
 class TuringMachine:
