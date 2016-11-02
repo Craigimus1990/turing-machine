@@ -11,17 +11,9 @@ qR = 'R'
 
 # Set up delta function
 delta = {}
-delta[(0, '0')] = (0, '0', 'R')
-delta[(0, '1')] = (0, '1', 'R')
-delta[(0, 'b')] = (1, 'b', 'L')
-delta[(1, '1')] = (2, 'b', 'R')
-delta[(2, 'b')] = (3, '1', 'L')
-delta[(3, 'b')] = (1, 'b', 'L')
-delta[(1, '0')] = (4, 'b', 'R')
-delta[(4, 'b')] = (5, '0', 'L')
-delta[(5, 'b')] = (1, 'b', 'L')
-delta[(1, 'b')] = ('A', '$', 'R')
-delta[(6, 'b')] = ('A', '$', 'R')
+delta[(0, '0')] = (1, '0', 'R')
+delta[(0, 'b')] = ('A', 'b', 'R')
+delta[(1, '0')] = (0, '0', 'R')
 
 
 class TuringMachine:
@@ -49,10 +41,11 @@ class TuringMachine:
 
   def __processTape(self, tape, index, state):
     self.__printConfiguration(tape, index, state)
-    transition = self.delta[(state, tape[index])]
 
-    if (not transition):
-      return (tape, index, self.qR)
+    if (not (state, tape[index]) in self.delta):
+      return tape, index, self.qR
+
+    transition = self.delta[(state, tape[index])]
 
     new_state, new_symbol, head_move = transition
     new_index = self.__moveHead(tape, new_symbol, head_move, index)
